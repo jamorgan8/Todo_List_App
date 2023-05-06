@@ -1,0 +1,8 @@
+clean
+cook
+clean
+run
+walk
+cook
+clean
+eat
