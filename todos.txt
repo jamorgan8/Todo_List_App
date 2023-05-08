@@ -1,8 +1,4 @@
-clean
 cook
 clean
-run
+drive
 walk
-cook
-clean
-eat

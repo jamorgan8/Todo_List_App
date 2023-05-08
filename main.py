@@ -7,41 +7,52 @@ while True:
         case 'add':
             todo = input("Enter a todo: ") + "\n" # "\n" is a line break
 
-            # open function creates a file object. open function takes 2 arguments- the file path and a character
-            # code (r, a, w, x).
-            # This chunk of code opens and saves the contents of the text file as a list then closes the file.
-            file = open('todos.txt', 'r')
-            todos = file.readlines()
-            file.close() # close file object to make sure other aspects of code don't interact
+            with open('todos.txt', 'r') as file:
+                todos = file.readlines()
 
             # Adds the new entry to list
             todos.append(todo)
 
-            # opens text file again and replaces contents with new list which is the original contents plus the addition
-            file = open('todos.txt', 'w')
-            # method for file objects. Takes 1 argument which must be a list
-            file.writelines(todos)
-            file.close()
+            with open('todos.txt', 'w') as file:
+                file.writelines(todos)
 
         case 'show':
-            file = open('todos.txt', 'r')
-            todos = file.readlines()
-            file.close()
 
-            for index, item in enumerate(new_todos): # iterates over todos list and prints index + 1 and item
+            with open('todos.txt', 'r') as file:
+                todos = file.readlines()
+
+            for index, item in enumerate(todos): # iterates over todos list and prints index + 1 and item
                 item = item.strip('\n')
                 print(f"{index+1}- {item}") #f string prints literal string as defined inside quotes
 
         case 'edit':
             number = int(input("Enter number of todo to edit: ")) ## int converts str.
             number = number - 1 # to correct for the python index starting at 0
+
+            with open('todos.txt', 'r') as file:
+                todos = file.readlines()
+
             new_todo = input("Enter new todo: ") ## stores new item
-            todos[number] = new_todo # stores new item to todos list at location of original
+            todos[number] = new_todo + '\n' # stores new item to todos list at location of original
+
+            with open('todos.txt', 'w') as file:
+                file.writelines(todos)
 
         case 'complete':
             number = int(input("Enter number of todo to complete: "))
-            removed = todos.pop(number-1)
-            print('Great work! You finished: ', removed)
+
+            with open('todos.txt', 'r') as file:
+                todos = file.readlines()
+
+            index = number - 1
+            todo_to_remove = todos[index].strip('\n')
+            todos.pop(index)
+
+            with open('todos.txt', 'w') as file:
+                file.writelines(todos)
+
+            message = f"Todo {todo_to_remove} was removed from your list. Great work!"
+            print(message)
 
         case 'exit':
             break # breaks while loop
